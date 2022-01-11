@@ -2,6 +2,7 @@ const express = req('express');
 const app = express();
 const mongoose = req('mongoose');
 const stuffRoutes = req('./routes/stuff');
+const userRoutes = req('./routes/user');
 
 mongoose.connect('mongodb+srv://jimbob:<PASSWORD>@cluster0-pme76.mongodb.net/test?retryWrites=true&w=majority',
   { useNewUrlParser: true,
@@ -15,6 +16,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/stuff', stuffRoutes);
+
+app.use('/api/stuff', stuffRoutes);
+app.use('/api/auth', userRoutes);
 
 app.use((req, res, next) => {
   res.status(201);
