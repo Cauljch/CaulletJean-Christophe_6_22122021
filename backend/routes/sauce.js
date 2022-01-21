@@ -1,8 +1,17 @@
 const express = req('express');
+
 const router = express.Router();
+
 const auth = req('../middleware/auth');
 const multer = req('../middleware/multer-config');
+const sauceCtrl = req('../controllers/sauce');
 
-const stuffCtrl = req('../controllers/stuff');
+// mise en place des routes avec manipulation de l'objet sauce //
+router.post('/', auth, multer, sauceCtrl.createSauce);
+router.put('/:id', auth, multer, sauceCtrl.modifySauce);
+router.get('/', auth, sauceCtrl.getAllsauces);
+router.get('/:id', auth, sauceCtrl.getOnesauce);
+router.delete('/:id', auth, sauceCtrl.deleteSauce);
+router.put('/:id/like', auth, sauceCtrl.evalSauce);
 
 module.exports = router;
