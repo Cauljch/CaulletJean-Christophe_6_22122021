@@ -1,10 +1,10 @@
-const express = req('express');
+const express = require('express');
 
 const router = express.Router();
 
-const auth = req('../middleware/auth');
-const multer = req('../middleware/multer-config');
-const sauceCtrl = req('../controllers/sauce');
+const auth = require('../middleware/auth');
+const multer = require('../middleware/multer-config');
+const sauceCtrl = require('../controllers/sauce');
 
 // mise en place des routes avec manipulation de l'objet sauce //
 router.post('/', auth, multer, sauceCtrl.createSauce);

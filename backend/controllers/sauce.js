@@ -1,7 +1,7 @@
 const Sauce = require('../models/sauces');
 
 const fs = require('fs');
-const { json } = require('stream/consumers');
+// const { json } = require('stream/consumers'); //
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
@@ -51,3 +51,6 @@ exports.deleteSauce = (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
 };
 
+exports.evalSauce = (req, res, next) => {
+    
+}
