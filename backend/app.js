@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(helmet());
 
 // Connexion à mongoDb //
-mongoose.connect('mongodb+srv://jimbob:<PASSWORD>@cluster0-pme76.mongodb.net/test?retryWrites=true&w=majority', { 
+mongoose.connect(process.env.MONGODB_URL, { 
   useNewUrlParser: true,
   useUnifiedTopology: true 
 })

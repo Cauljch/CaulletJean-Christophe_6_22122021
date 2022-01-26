@@ -56,14 +56,15 @@ exports.deleteSauce = (req, res, next) => {
 };
 
 exports.evalSauce = (req, res, next) => {
+
     const like = req.body.like;
     const userId = req.body.userId;
     const sauceId = req.params.id;
-    switch (like) {
 
+    switch (like) {
         case 1:
             Sauce.findOneAndUpdate(
-                { _id : req.params.id },
+                { _id : sauceId },
                 { $push: { usersLiked: userId }, $inc: { likes: +1 }})
                 .then(() => res.status(200).json({ message: 'La sauce a bien été créditée !'}))
                 .catch(error => res.status(400).json({ error }));
@@ -71,12 +72,32 @@ exports.evalSauce = (req, res, next) => {
 
         case -1:
             Sauce.findOneAndUpdate(
-                { _id : req.params.id },
-                { $push: { usersDisliked: userId }, $inc: { dislikes: +1 }}
-            )
+                { _id : sauceId },
+                { $push: { usersDisliked: userId }, $inc: { dislikes: +1 }})
                 .then(() => res.status(200).json({ message: 'La sauce a bien été discréditée !'}))
                 .catch(error => res.status(400).json({ error }));
             break;
-            
-            }
-}
+
+        case 0:
+            Sauce.findOne(
+                { _id : sauceId })
+                .then((sauce) => {
+                    if (sauce.usersLiked.includes(userId)) {
+                        Sauce.findOneAndUpdate(
+                            { _id : sauceId },
+                            { $pull: { usersLiked: userId }, $inc: { likes: -1}})
+                            .then(() => res.status(200).json({ message: 'Le crédit de la sauce a bien été annulé !'}))
+                            .catch(error => res.status(400).json({ error }));
+
+                    }
+                    else if (sauce.usersDisliked.includes(userId)) {
+                        Sauce.findOneAndUpdate(
+                            { _id : sauceId },
+                            { $pull: { usersDisliked: userId }, $inc: { dislikes: -1}})
+                            .then(() => res.status(200).json({ message: 'Le discrédit de la sauce a bien été annulé !'}))
+                            .catch(error => res.status(400).json({ error }));
+                    }
+                    next;
+                })
+    }
+};
