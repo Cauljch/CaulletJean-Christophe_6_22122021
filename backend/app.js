@@ -38,7 +38,7 @@ mongoose.connect('mongodb+srv://jimbob:<PASSWORD>@cluster0-pme76.mongodb.net/tes
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 // Traitement des images et des routes //
-app.use('/images', express.static(path.join__dirname, '/images')); 
+app.use('/images', express.static(path.join(__dirname, '/images'))); 
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
 

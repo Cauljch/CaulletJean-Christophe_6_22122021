@@ -9,7 +9,11 @@ exports.createSauce = (req, res, next) => {
     const sauce = new Sauce({
         ...sauceObject,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    })
+        likes: 0,
+        dislikes: 0,
+        usersLiked: [],
+        usersDisliked: [],
+    });
     sauce.save()
     .then(() => res.status(201).json({ message: 'La sauce est enregistrée !'}))
     .catch(error => res.status(400).json({ error }));
@@ -52,5 +56,27 @@ exports.deleteSauce = (req, res, next) => {
 };
 
 exports.evalSauce = (req, res, next) => {
-    
+    const like = req.body.like;
+    const userId = req.body.userId;
+    const sauceId = req.params.id;
+    switch (like) {
+
+        case 1:
+            Sauce.findOneAndUpdate(
+                { _id : req.params.id },
+                { $push: { usersLiked: userId }, $inc: { likes: +1 }})
+                .then(() => res.status(200).json({ message: 'La sauce a bien été créditée !'}))
+                .catch(error => res.status(400).json({ error }));
+            break;
+
+        case -1:
+            Sauce.findOneAndUpdate(
+                { _id : req.params.id },
+                { $push: { usersDisliked: userId }, $inc: { dislikes: +1 }}
+            )
+                .then(() => res.status(200).json({ message: 'La sauce a bien été discréditée !'}))
+                .catch(error => res.status(400).json({ error }));
+            break;
+            
+            }
 }
